@@ -5,7 +5,9 @@ VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lab2", "Lab2\Lab2.csproj", "{13BA1086-4F58-40B2-A89A-2487DBA1A5B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "TestServer\TestServer.csproj", "{669F6072-FF43-4628-B9E6-A9923415708F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestServer", "TestServer\TestServer.csproj", "{669F6072-FF43-4628-B9E6-A9923415708F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PongClient", "PongClient\PongClient.csproj", "{AC148559-81DD-406C-851C-BF1A62D535D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{669F6072-FF43-4628-B9E6-A9923415708F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{669F6072-FF43-4628-B9E6-A9923415708F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{669F6072-FF43-4628-B9E6-A9923415708F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC148559-81DD-406C-851C-BF1A62D535D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC148559-81DD-406C-851C-BF1A62D535D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC148559-81DD-406C-851C-BF1A62D535D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC148559-81DD-406C-851C-BF1A62D535D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
