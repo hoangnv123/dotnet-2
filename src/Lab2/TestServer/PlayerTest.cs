@@ -1,6 +1,6 @@
 using Xunit;
 using Lab2.Model;
-using Lab2.Service;
+using Lab2.Serializer;
 
 namespace TestServer
 {
