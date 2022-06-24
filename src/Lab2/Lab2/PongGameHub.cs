@@ -1,10 +1,9 @@
 ﻿using Lab2.Model;
+using Lab2.Service;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Lab2
@@ -13,24 +12,24 @@ namespace Lab2
     {
         private readonly ILogger<PongGameHub> _logger;
 
-        private readonly ConcurrentDictionary<string, Player> UsersInLobby = new ConcurrentDictionary<string, Player>();
+        private readonly IPongService _pongService;
 
-        public PongGameHub(ILogger<PongGameHub> logger)
+        public PongGameHub(IPongService pongService, ILogger<PongGameHub> logger)
         {
+            _pongService = pongService;
             _logger = logger;
         }
 
-        public async Task Login(string player, string position)
+        public async Task<bool> Login(string player, string position)
         {
-            if (UsersInLobby.Count > 2) return;
+            if (_pongService!.GetPlayerCount() > 2) return false;
             _logger.LogInformation($"Login: {_logger}", player);
-            UsersInLobby.AddOrUpdate(Context.ConnectionId, new Player(Context.ConnectionId, player, position), (key, oldPlayer)
-                => new Player(key, player, position));
+            _pongService.UpdatePlayer(player, position, Context.ConnectionId);
 
-            await Clients.All.SendAsync("GetConnectedUsers", 
-                  UsersInLobby.Select(x => new Player(x.Key, x.Value.UserName, x.Value.PlayerPosition)).ToList());
-
-            if (UsersInLobby.Count > 1 && UsersInLobby.Count(u => u.Value.PlayerPosition != "") == 2)
+            await Clients.All.SendAsync("GetConnectedUsers", _pongService.PlayerToList());
+                  
+            
+            if (_pongService.GetPlayerCount() > 1 && _pongService.GetPlayerPositionCount() == 2)
             {
                 var task = Task.Run(async () =>
                 {
@@ -45,20 +44,19 @@ namespace Lab2
                 _logger.LogInformation("StartGame");
                 await Clients.All.SendAsync("StartGame");
             }
+            return true;
         }
 
         public async Task GetConnectedPlayers()
         {
-            _logger.LogInformation($"GetConnectedPlayers {UsersInLobby.Count}");
-            await Clients.All.SendAsync("GetConnectedPlayers",
-                UsersInLobby.Select(x => new Player(x.Key, x.Value.UserName!, x.Value.PlayerPosition!)).ToList());
+            _logger.LogInformation($"GetConnectedPlayers {_pongService!.GetPlayerCount()}");
+            await Clients.All.SendAsync("GetConnectedPlayers", _pongService.PlayerToList());
         }
 
         public async Task GetTakenGameSide()
         {
-            _logger.LogInformation($"GetTakenGameSide {UsersInLobby.Count}");
-            await Clients.Caller.SendAsync("GetTakenGameSide",
-                UsersInLobby.Select(x => x.Value.PlayerPosition));
+            _logger.LogInformation($"GetTakenGameSide {_pongService!.GetPlayerCount()}");
+            await Clients.Caller.SendAsync("GetTakenGameSide", _pongService.GetPlayerPosition());
         }
 
         public async Task MakeGoals(GameScore gameScore)
@@ -66,7 +64,7 @@ namespace Lab2
             if (gameScore.RightScore >= 10 || gameScore.LeftScore >= 10)
             {
                 await Clients.All.SendAsync("FinishGame", gameScore);
-                foreach (var player in UsersInLobby)
+                foreach (var player in _pongService!.GetConcurrentDictionary())
                 {
                     player.Value.PlayerPosition = "";
                 }
@@ -89,9 +87,8 @@ namespace Lab2
 
         public override Task OnDisconnectedAsync(Exception? exception)
         {
-            UsersInLobby.Remove(Context.ConnectionId, out _);
-            Clients.All.SendAsync("GetConnectedUsers", UsersInLobby.Select(x =>
-                    new Player(x.Key, x.Value.UserName!, x.Value.PlayerPosition!)).ToList());
+            _pongService!.GetConcurrentDictionary().Remove(Context.ConnectionId, out _);
+            Clients.All.SendAsync("GetConnectedUsers", _pongService.PlayerToList());
             Clients.Others.SendAsync("GameLeft");
             return base.OnDisconnectedAsync(exception);
         }

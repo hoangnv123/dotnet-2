@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace Lab2.Service
+namespace Lab2.Serializer
 {
     public class PlayerSerializer
     {
