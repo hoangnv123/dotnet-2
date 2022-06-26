@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using PongClient.Command;
+using System.Linq;
 
 namespace PongClient.ViewModel
 {
@@ -11,7 +13,7 @@ namespace PongClient.ViewModel
     {
         private IPongClientService _pongService;
 
-        public ObservableCollection<PlayerModel> Players { get; set; } = new();
+        public ObservableCollection<Player> Players { get; set; } = new();
 
         public enum GameSide
         {
@@ -24,17 +26,17 @@ namespace PongClient.ViewModel
         public MainViewModel(IPongClientService pongService)
         {
             _pongService = pongService;
-            pongService.PlayerLobby.Subscribe(login =>
+            pongService.GetConnectedPlayers();
+            pongService.PlayerJoined.Subscribe( position=>
             {
-                Players.Add(new PlayerModel
+                Players.Add(new Player
                 {
-                    PlayerPosition = login
+                    PlayerPosition = position
                 });
             });
-            
         }
 
-    public bool _isLeft => _gameSide == GameSide.Left;
+        public bool _isLeft => _gameSide == GameSide.Left;
 
     public string FinishGame(GameScore score)
     {

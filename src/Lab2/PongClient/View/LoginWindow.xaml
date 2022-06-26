@@ -25,7 +25,7 @@
     <StackPanel>
         <Label Content="Wellcome To Pong Game" HorizontalAlignment="Center" FontSize="25"></Label>
         <Label Content="Pick Position To Play" HorizontalAlignment="Center" FontSize="20"></Label>
-        <Button x:Name="TakeSide" Content="Left Side" Width="100" Height="25" Margin="0 20 0 0" Command="{Binding LoginCommand}"/>
-        <Button x:Name="MakeSide" Content="Right Side" Width="100" Height="25" Margin="0 20 0 0" Command="{Binding LoginCommand}"/>
+        <Button x:Name="TakeSide" Content="Left Side" Width="100" Height="25" Margin="0 20 0 0" Command="{Binding LoginCommand}" Click="LeftSide_Click"/>
+        <Button x:Name="MakeSide" Content="Right Side" Width="100" Height="25" Margin="0 20 0 0" Command="{Binding LoginCommand}" Click="RightSide_Click"/>
     </StackPanel>
 </Window>

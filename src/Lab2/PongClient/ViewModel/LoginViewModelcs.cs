@@ -65,7 +65,11 @@ namespace PongClient.ViewModel
                 IsConnected = true;
                 return true;
             }
-            catch (Exception) { return false; }
+            catch (Exception e)
+            { 
+                MessageBox.Show(e.Message); 
+                return false; 
+            }
         }
         #endregion
 
@@ -89,11 +93,10 @@ namespace PongClient.ViewModel
                     return false;
                 }
                 var mainViewModel = new MainViewModel(_pongService);
-                if (await _pongService.Login(_playerName!, _position!))
+                if (await _pongService.Login(_playerName!, _position!)) // getconnectplayer event dont use
                 {
+                    await _pongService.GetConnectedPlayers();
                     MainWindow mainWindow = new MainWindow { DataContext = mainViewModel };
-                    if (_position == "Left") mainWindow.LeftPaddle.Name = _position;
-                    if (_position == "Right") mainWindow.RightPaddle.Name = _position;
                     mainWindow.Show();
                     Application.Current.MainWindow.Close();
                 }
@@ -103,6 +106,29 @@ namespace PongClient.ViewModel
             {
                 MessageBox.Show(e.Message);
                 return false;
+            }
+        }
+
+        private ICommand? _takeSideCommand;
+
+        public ICommand? TakeSideCommand
+        {
+            get
+            {
+                return _takeSideCommand ?? (_takeSideCommand = new CommandAsync(TakeSide));
+            }
+        }
+
+        private async Task TakeSide()
+        {
+            try
+            {
+                await _pongService.GetTakenGameSide(_position!);
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

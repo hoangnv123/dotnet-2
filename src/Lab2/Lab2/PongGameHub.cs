@@ -26,9 +26,9 @@ namespace Lab2
             _logger.LogInformation($"Login: {_logger}", player);
             _pongService.UpdatePlayer(player, position, Context.ConnectionId);
 
-            await Clients.All.SendAsync("GetConnectedUsers", _pongService.PlayerToList());
-                  
-            
+            await Clients.All.SendAsync("GetConnectedPlayer", _pongService.PlayerToList());
+
+
             if (_pongService.GetPlayerCount() > 1 && _pongService.GetPlayerPositionCount() == 2)
             {
                 var task = Task.Run(async () =>

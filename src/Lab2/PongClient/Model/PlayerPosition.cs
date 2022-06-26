@@ -2,6 +2,6 @@
 {
     public class PlayerPosition
     {
-        public string? playerPostX { get; set; } 
+        public double PlayerPosX { get; set; }
     }
 }

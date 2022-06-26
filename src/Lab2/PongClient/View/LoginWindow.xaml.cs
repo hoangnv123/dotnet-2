@@ -24,5 +24,15 @@ namespace PongClient.View
         {
             InitializeComponent();
         }
+
+        private void LeftSide_Click(object sender, RoutedEventArgs e)
+        {
+            MakeSide.Visibility = Visibility.Collapsed;
+        }
+
+        private void RightSide_Click(object sender, RoutedEventArgs e)
+        {
+            TakeSide.Visibility = Visibility.Collapsed;
+        }
     }
 }

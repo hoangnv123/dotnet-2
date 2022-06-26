@@ -161,20 +161,6 @@ namespace PongClient
         {
             switch (e.Key)
             {
-                case Key.W:
-                    {
-                        Player1Up = true;
-                        Player1Down = false;
-                        break;
-                    }
-
-                case Key.S:
-                    {
-                        Player1Up = false;
-                        Player1Down = true;
-                        break;
-                    }
-
                 case Key.Up:
                     {
                         Player2Up = true;
@@ -191,7 +177,49 @@ namespace PongClient
             }
         }
 
+
         private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Up:
+                    {
+                        Player2Up = false;
+                        Player2Down = false;
+                        break;
+                    }
+
+                case Key.Down:
+                    {
+                        Player2Up = false;
+                        Player2Down = false;
+                        break;
+                    }
+            }
+        }
+
+
+        private void Window_KeyDown_LeftPlayer(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.W:
+                    {
+                        Player1Up = true;
+                        Player1Down = false;
+                        break;
+                    }
+
+                case Key.S:
+                    {
+                        Player1Up = false;
+                        Player1Down = true;
+                        break;
+                    }
+            }
+        }
+
+        private void Window_KeyUp_LeftPlayer(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {
@@ -206,20 +234,6 @@ namespace PongClient
                     {
                         Player1Up = false;
                         Player1Down = false;
-                        break;
-                    }
-
-                case Key.Up:
-                    {
-                        Player2Up = false;
-                        Player2Down = false;
-                        break;
-                    }
-
-                case Key.Down:
-                    {
-                        Player2Up = false;
-                        Player2Down = false;
                         break;
                     }
             }
